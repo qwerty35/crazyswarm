@@ -523,85 +523,86 @@ public:
     std::function<void(float)> cb_lq = std::bind(&CrazyflieROS::onLinkQuality, this, std::placeholders::_1);
     m_cf.setLinkQualityCallback(cb_lq);
 
-    m_cf.logReset();
-
-    int numParams = 0;
-    if (m_enableParameters)
-    {
-      ROS_INFO("[%s] Requesting parameters...", m_frame.c_str());
-      m_cf.requestParamToc(m_forceNoCache);
-      for (auto iter = m_cf.paramsBegin(); iter != m_cf.paramsEnd(); ++iter) {
-        auto entry = *iter;
-        std::string paramName = "/" + m_tf_prefix + "/" + entry.group + "/" + entry.name;
-        switch (entry.type) {
-          case Crazyflie::ParamTypeUint8:
-            ros::param::set(paramName, m_cf.getParam<uint8_t>(entry.id));
-            break;
-          case Crazyflie::ParamTypeInt8:
-            ros::param::set(paramName, m_cf.getParam<int8_t>(entry.id));
-            break;
-          case Crazyflie::ParamTypeUint16:
-            ros::param::set(paramName, m_cf.getParam<uint16_t>(entry.id));
-            break;
-          case Crazyflie::ParamTypeInt16:
-            ros::param::set(paramName, m_cf.getParam<int16_t>(entry.id));
-            break;
-          case Crazyflie::ParamTypeUint32:
-            ros::param::set(paramName, (int)m_cf.getParam<uint32_t>(entry.id));
-            break;
-          case Crazyflie::ParamTypeInt32:
-            ros::param::set(paramName, m_cf.getParam<int32_t>(entry.id));
-            break;
-          case Crazyflie::ParamTypeFloat:
-            ros::param::set(paramName, m_cf.getParam<float>(entry.id));
-            break;
+    if(m_type != "mavswarm_client") {
+        m_cf.logReset();
+        int numParams = 0;
+        if (m_enableParameters) {
+            ROS_INFO("[%s] Requesting parameters...", m_frame.c_str());
+            m_cf.requestParamToc(m_forceNoCache);
+            for (auto iter = m_cf.paramsBegin(); iter != m_cf.paramsEnd(); ++iter) {
+                auto entry = *iter;
+                std::string paramName = "/" + m_tf_prefix + "/" + entry.group + "/" + entry.name;
+                switch (entry.type) {
+                    case Crazyflie::ParamTypeUint8:
+                        ros::param::set(paramName, m_cf.getParam<uint8_t>(entry.id));
+                        break;
+                    case Crazyflie::ParamTypeInt8:
+                        ros::param::set(paramName, m_cf.getParam<int8_t>(entry.id));
+                        break;
+                    case Crazyflie::ParamTypeUint16:
+                        ros::param::set(paramName, m_cf.getParam<uint16_t>(entry.id));
+                        break;
+                    case Crazyflie::ParamTypeInt16:
+                        ros::param::set(paramName, m_cf.getParam<int16_t>(entry.id));
+                        break;
+                    case Crazyflie::ParamTypeUint32:
+                        ros::param::set(paramName, (int) m_cf.getParam<uint32_t>(entry.id));
+                        break;
+                    case Crazyflie::ParamTypeInt32:
+                        ros::param::set(paramName, m_cf.getParam<int32_t>(entry.id));
+                        break;
+                    case Crazyflie::ParamTypeFloat:
+                        ros::param::set(paramName, m_cf.getParam<float>(entry.id));
+                        break;
+                }
+                ++numParams;
+            }
+            ros::NodeHandle n;
+            n.setCallbackQueue(&queue);
+            m_serviceUpdateParams = n.advertiseService(m_tf_prefix + "/update_params", &CrazyflieROS::updateParams,
+                                                       this);
         }
-        ++numParams;
-      }
-      ros::NodeHandle n;
-      n.setCallbackQueue(&queue);
-      m_serviceUpdateParams = n.advertiseService(m_tf_prefix + "/update_params", &CrazyflieROS::updateParams, this);
+        auto end1 = std::chrono::system_clock::now();
+        std::chrono::duration<double> elapsedSeconds1 = end1 - start;
+        ROS_INFO("[%s] reqParamTOC: %f s (%d params)", m_frame.c_str(), elapsedSeconds1.count(), numParams);
+
+
+        // Logging
+        if (m_enableLogging) {
+            ROS_INFO("[%s] Requesting logging variables...", m_frame.c_str());
+            m_cf.requestLogToc(m_forceNoCache);
+            auto end2 = std::chrono::system_clock::now();
+            std::chrono::duration<double> elapsedSeconds2 = end2 - end1;
+            ROS_INFO("[%s] reqLogTOC: %f s", m_frame.c_str(), elapsedSeconds2.count());
+
+            m_logBlocksGeneric.resize(m_logBlocks.size());
+            // custom log blocks
+            size_t i = 0;
+            for (auto &logBlock : m_logBlocks) {
+                std::function<void(uint32_t, std::vector<double> *, void *userData)> cb =
+                        std::bind(
+                                &CrazyflieROS::onLogCustom,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2,
+                                std::placeholders::_3);
+
+                m_logBlocksGeneric[i].reset(new LogBlockGeneric(
+                        &m_cf,
+                        logBlock.variables,
+                        (void *) &m_pubLogDataGeneric[i],
+                        cb));
+                m_logBlocksGeneric[i]->start(logBlock.frequency / 10);
+                ++i;
+            }
+            auto end3 = std::chrono::system_clock::now();
+            std::chrono::duration<double> elapsedSeconds3 = end3 - end2;
+            ROS_INFO("[%s] logBlocks: %f s", m_frame.c_str(), elapsedSeconds1.count());
+        }
+
+        ROS_INFO("Requesting memories...");
+        m_cf.requestMemoryToc();
     }
-    auto end1 = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsedSeconds1 = end1-start;
-    ROS_INFO("[%s] reqParamTOC: %f s (%d params)", m_frame.c_str(), elapsedSeconds1.count(), numParams);
-
-    // Logging
-    if (m_enableLogging) {
-      ROS_INFO("[%s] Requesting logging variables...", m_frame.c_str());
-      m_cf.requestLogToc(m_forceNoCache);
-      auto end2 = std::chrono::system_clock::now();
-      std::chrono::duration<double> elapsedSeconds2 = end2-end1;
-      ROS_INFO("[%s] reqLogTOC: %f s", m_frame.c_str(), elapsedSeconds2.count());
-
-      m_logBlocksGeneric.resize(m_logBlocks.size());
-      // custom log blocks
-      size_t i = 0;
-      for (auto& logBlock : m_logBlocks)
-      {
-        std::function<void(uint32_t, std::vector<double>*, void* userData)> cb =
-          std::bind(
-            &CrazyflieROS::onLogCustom,
-            this,
-            std::placeholders::_1,
-            std::placeholders::_2,
-            std::placeholders::_3);
-
-        m_logBlocksGeneric[i].reset(new LogBlockGeneric(
-          &m_cf,
-          logBlock.variables,
-          (void*)&m_pubLogDataGeneric[i],
-          cb));
-        m_logBlocksGeneric[i]->start(logBlock.frequency / 10);
-        ++i;
-      }
-      auto end3 = std::chrono::system_clock::now();
-      std::chrono::duration<double> elapsedSeconds3 = end3-end2;
-      ROS_INFO("[%s] logBlocks: %f s", m_frame.c_str(), elapsedSeconds1.count());
-    }
-
-    ROS_INFO("Requesting memories...");
-    m_cf.requestMemoryToc();
 
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = end-start;
@@ -655,32 +656,37 @@ public:
       return;
     }
 
-    m_cf.startSetParamRequest();
-    auto entry = m_cf.getParamTocEntry("kalman", "initialX");
-    m_cf.addSetParam(entry->id, x);
-    entry = m_cf.getParamTocEntry("kalman", "initialY");
-    m_cf.addSetParam(entry->id, y);
-    entry = m_cf.getParamTocEntry("kalman", "initialZ");
-    m_cf.addSetParam(entry->id, z);
-    m_cf.setRequestedParams();
+    if(m_type != "mavswarm_client") {
+        m_cf.startSetParamRequest();
+        auto entry = m_cf.getParamTocEntry("kalman", "initialX");
+        m_cf.addSetParam(entry->id, x);
+        entry = m_cf.getParamTocEntry("kalman", "initialY");
+        m_cf.addSetParam(entry->id, y);
+        entry = m_cf.getParamTocEntry("kalman", "initialZ");
+        m_cf.addSetParam(entry->id, z);
+        m_cf.setRequestedParams();
 
-    entry = m_cf.getParamTocEntry("kalman", "resetEstimation");
-    m_cf.setParam<uint8_t>(entry->id, 1);
+        entry = m_cf.getParamTocEntry("kalman", "resetEstimation");
+        m_cf.setParam<uint8_t>(entry->id, 1);
 
-    // kalmanUSC might not be part of the firmware
-    entry = m_cf.getParamTocEntry("kalmanUSC", "resetEstimation");
-    if (entry) {
-      m_cf.startSetParamRequest();
-      entry = m_cf.getParamTocEntry("kalmanUSC", "initialX");
-      m_cf.addSetParam(entry->id, x);
-      entry = m_cf.getParamTocEntry("kalmanUSC", "initialY");
-      m_cf.addSetParam(entry->id, y);
-      entry = m_cf.getParamTocEntry("kalmanUSC", "initialZ");
-      m_cf.addSetParam(entry->id, z);
-      m_cf.setRequestedParams();
+        // kalmanUSC might not be part of the firmware
+        entry = m_cf.getParamTocEntry("kalmanUSC", "resetEstimation");
+        if (entry) {
+            m_cf.startSetParamRequest();
+            entry = m_cf.getParamTocEntry("kalmanUSC", "initialX");
+            m_cf.addSetParam(entry->id, x);
+            entry = m_cf.getParamTocEntry("kalmanUSC", "initialY");
+            m_cf.addSetParam(entry->id, y);
+            entry = m_cf.getParamTocEntry("kalmanUSC", "initialZ");
+            m_cf.addSetParam(entry->id, z);
+            m_cf.setRequestedParams();
 
-      entry = m_cf.getParamTocEntry("kalmanUSC", "resetEstimation");
-      m_cf.setParam<uint8_t>(entry->id, 1);
+            entry = m_cf.getParamTocEntry("kalmanUSC", "resetEstimation");
+            m_cf.setParam<uint8_t>(entry->id, 1);
+        }
+    }
+    else{
+        //TODO: initialize Pose
     }
 
     m_initializedPosition = true;
@@ -1136,11 +1142,13 @@ private:
     for (const auto& config : cfConfigs) {
       addCrazyflie(config.uri, config.tf_prefix, config.frame, "/world", enableParameters, enableLogging, config.idNumber, config.type, logBlocks, forceNoCache);
 
-      auto start = std::chrono::high_resolution_clock::now();
-      updateParams(m_cfs.back());
-      auto end = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double> elapsed = end - start;
-      ROS_INFO("Update params: %f s", elapsed.count());
+      if(m_cfs.back()->type() != "mavswarm_client") {
+          auto start = std::chrono::high_resolution_clock::now();
+          updateParams(m_cfs.back());
+          auto end = std::chrono::high_resolution_clock::now();
+          std::chrono::duration<double> elapsed = end - start;
+          ROS_INFO("Update params: %f s", elapsed.count());
+      }
     }
   }
 
@@ -1919,7 +1927,7 @@ int main(int argc, char **argv)
 {
   // raise(SIGSTOP);
 
-  ros::init(argc, argv, "crazyflie_server");
+  ros::init(argc, argv, "crazyswarm_server");
 
   // ros::NodeHandle n("~");
   // std::string worldFrame;

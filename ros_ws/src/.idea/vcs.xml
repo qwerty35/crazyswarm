@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/crazyflie_ros" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/crazyflie_ros/crazyflie_cpp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/crazyflie_ros/crazyflie_tools" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/externalDependencies/libmotioncapture" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/externalDependencies/libmotioncapture/externalDependencies/qualisys_cpp_sdk" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/externalDependencies/libmotioncapture/externalDependencies/vicon-datastream-sdk" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/externalDependencies/libobjecttracker" vcs="Git" />
+  </component>
+</project>
