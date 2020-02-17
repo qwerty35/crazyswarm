@@ -18,9 +18,9 @@
       <config projectName="crazyswarm" targetName="geometry_msgs_generate_messages_nodejs" />
       <config projectName="crazyswarm" targetName="actionlib_generate_messages_nodejs" />
       <config projectName="crazyswarm" targetName="sensor_msgs_generate_messages_eus" />
-      <config projectName="crazyswarm" targetName="actionlib_generate_messages_cpp" />
-      <config projectName="crazyswarm" targetName="actionlib_generate_messages_lisp" />
       <config projectName="crazyswarm" targetName="rosgraph_msgs_generate_messages_lisp" />
+      <config projectName="crazyswarm" targetName="actionlib_generate_messages_lisp" />
+      <config projectName="crazyswarm" targetName="actionlib_generate_messages_cpp" />
       <config projectName="crazyswarm" targetName="std_msgs_generate_messages_lisp" />
       <config projectName="crazyswarm" targetName="download_extra_data" />
       <config projectName="crazyswarm" targetName="rosgraph_msgs_generate_messages_nodejs" />
@@ -43,8 +43,8 @@
       <config projectName="crazyswarm" targetName="actionlib_generate_messages_eus" />
       <config projectName="crazyswarm" targetName="tests" />
       <config projectName="crazyswarm" targetName="tf_generate_messages_lisp" />
-      <config projectName="crazyswarm" targetName="geometry_msgs_generate_messages_cpp" />
       <config projectName="crazyswarm" targetName="gtest_main" />
+      <config projectName="crazyswarm" targetName="geometry_msgs_generate_messages_cpp" />
       <config projectName="crazyswarm" targetName="roscpp_generate_messages_lisp" />
       <config projectName="crazyswarm" targetName="clean_test_results" />
       <config projectName="crazyswarm" targetName="mocap_helper" />
@@ -75,7 +75,11 @@
   <component name="ChangeListManager">
     <list default="true" id="578ec007-510f-432a-a8fb-d2418570b607" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../../crazyflie-firmware" beforeDir="false" afterPath="$PROJECT_DIR$/../../../crazyflie-firmware" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/launch/test.rviz" beforeDir="false" afterPath="$PROJECT_DIR$/launch/test.rviz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../crazyradio-firmware" beforeDir="false" afterPath="$PROJECT_DIR$/../../../crazyradio-firmware" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../crazyflie_ros" beforeDir="false" afterPath="$PROJECT_DIR$/../crazyflie_ros" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch/allCrazyflies.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/launch/allCrazyflies.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch/crazyflies.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/launch/crazyflies.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,9 +93,9 @@
     <session id="213506938">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.0" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -107,7 +111,7 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
@@ -129,10 +133,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1985" />
-    <option name="y" value="-4" />
-    <option name="width" value="1855" />
-    <option name="height" value="1084" />
+    <option name="x" value="64" />
+    <option name="y" value="-11" />
+    <option name="width" value="1857" />
+    <option name="height" value="1092" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -576,24 +580,20 @@
       <option name="presentableId" value="Default" />
       <updated>1578909830681</updated>
       <workItem from="1578909832192" duration="25000" />
+      <workItem from="1579767829817" duration="17000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25000" />
+    <option name="totallyTimeSpent" value="42000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1985" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24958494" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25235197" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Messages" visible="true" weight="0.32984293" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="CMake" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -601,10 +601,17 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Messages" order="8" visible="true" weight="0.32984293" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="CMake" order="12" />
+      <window_info anchor="right" id="make" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">

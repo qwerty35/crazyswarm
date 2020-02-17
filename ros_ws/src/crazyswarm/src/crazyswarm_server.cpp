@@ -374,10 +374,9 @@ public:
         pieces[i].p[3][j] = req.pieces[i].poly_yaw[j];
       }
     }
-    m_cf.uploadTrajectory(req.trajectoryId, req.pieceOffset, pieces);
+    m_cf.uploadTrajectory(m_type, req.trajectoryId, req.pieceOffset, pieces);
 
     ROS_INFO("[%s] Uploaded trajectory", m_frame.c_str());
-
 
     return true;
   }
@@ -1569,7 +1568,10 @@ public:
       uint32_t latencyCount = 0;
       std::vector<libmotioncapture::LatencyInfo> mocapLatency;
 
-      while (ros::ok() && !m_isEmergency) {
+      ros::NodeHandle nh("~");
+      ros::Publisher debug = nh.advertise<geometry_msgs::PoseStamped>("/debug/debug", 5);
+      geometry_msgs::PoseStamped debugdebug;
+      while (ros::ok()) { //&& !m_isEmergency) {
         // Get a frame
         mocap->waitForNextFrame();
 
@@ -1701,6 +1703,7 @@ public:
         // ROS_INFO("Latency: %f s", elapsedSeconds.count());
 
         // m_fastQueue.callAvailable(ros::WallDuration(0));
+        debug.publish(debugdebug);
       }
 
       if (logClouds) {
