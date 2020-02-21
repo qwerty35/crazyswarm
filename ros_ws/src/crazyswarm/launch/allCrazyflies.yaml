@@ -1,7 +1,7 @@
 crazyflies:
-  - id: 2
+  - id: 1
     channel: 50
-    initialPosition: [1.0, 0.0, 0.0]
+    initialPosition: [-1.0, 0.0, 0.0]
     type: mavswarm_client
 
 

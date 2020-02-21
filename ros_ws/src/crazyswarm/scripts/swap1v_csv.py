@@ -19,8 +19,8 @@ if __name__ == "__main__":
     timeHelper = swarm.timeHelper
     allcfs = swarm.allcfs
 
-    ids = [1,2] #[15, 16, 17] #range(1, 6+1)
-    trajIds = [1,2] #[1, 2, 3, 4, 5, 6]
+    ids = [1] #[15, 16, 17] #range(1, 6+1)
+    trajIds = [1] #[1, 2, 3, 4, 5, 6]
 
     cfs = [allcfs.crazyfliesById[i] for i in ids]
     root = 'swap2v_pps'
