@@ -1121,7 +1121,7 @@ private:
 
     // Turn all CFs on
     for (const auto& config : cfConfigs) {
-      Crazyflie cf(config.uri);
+      Crazyflie cf(config.uri, rosLogger);
       cf.syson();
       for (size_t i = 0; i < 50; ++i) {
         cf.sendPing();
@@ -1292,7 +1292,7 @@ public:
     , m_serviceLand()
     , m_serviceGoTo()
     , m_lastInteractiveObjectPosition(-10, -10, 1)
-    , m_broadcastingNumRepeats(15)
+    , m_broadcastingNumRepeats(50)
     , m_broadcastingDelayBetweenRepeatsMs(1)
   {
     ros::NodeHandle nh;
@@ -1379,7 +1379,7 @@ public:
     nl.getParam("write_csvs", writeCSVs);
     nl.param<std::string>("motion_capture_type", motionCaptureType, "vicon");
 
-    nl.param<int>("broadcasting_num_repeats", m_broadcastingNumRepeats, 15);
+    nl.param<int>("broadcasting_num_repeats", m_broadcastingNumRepeats, 50);
     nl.param<int>("broadcasting_delay_between_repeats_ms", m_broadcastingDelayBetweenRepeatsMs, 1);
     nl.param<bool>("send_position_only", sendPositionOnly, false);
 
@@ -1715,6 +1715,8 @@ public:
     for (auto& thread : threads) {
       thread.join();
     }
+
+    int debug = 0;
   }
 
   void runSlow()

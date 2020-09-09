@@ -56,3 +56,6 @@ if __name__ == "__main__":
     ssh_manager.create_ssh_client("192.168.1.100", "upboard1", "icsl1312")
     ssh_manager.get_file('~/catkin_ws/src/mavswarm_client/log/LastFlight.bag', '/home/jungwon/test/mav1.bag')
     ssh_manager.close_ssh_client()
+    ssh_manager.create_ssh_client("192.168.1.183", "lp1", "icsl1312")
+    ssh_manager.get_file('~/catkin_ws/src/mavswarm_client/log/LastFlight.bag', '/home/jungwon/test/mav2.bag')
+    ssh_manager.close_ssh_client()

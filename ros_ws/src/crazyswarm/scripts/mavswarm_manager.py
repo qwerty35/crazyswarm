@@ -14,7 +14,7 @@ from pycrazyswarm import *
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 SCRIPTDIR = "../../../../scripts/"
-Z = 0.3
+Z = 0.4
 
 class CFWidget(Tkinter.Frame):
 	def __init__(self, parent, name):
@@ -102,39 +102,38 @@ def handleKey(event):
 
         if k=='w':
                 for cf in cfs:
-                    cf.goTo(np.array([0.1, 0, 0]), 0, 1.0, relative=True)
+                    cf.goTo(np.array([0.1, 0, 0]), 0, 0.05, relative=True)
                 print "front"
         elif k=='s':
                 for cf in cfs:
-                    cf.goTo(np.array([-0.1, 0, 0]), 0, 1.0, relative=True)
+                    cf.goTo(np.array([-0.1, 0, 0]), 0, 0.05, relative=True)
                 print "back"
         elif k=='d':
                 for cf in cfs:
-                    cf.goTo(np.array([0, -0.1, 0]), 0, 1.0, relative=True)
+                    cf.goTo(np.array([0, -0.1, 0]), 0, 0.05, relative=True)
                 print "right"
         elif k=='a':
                 for cf in cfs:
-                    cf.goTo(np.array([0, 0.1, 0]), 0, 1.0, relative=True)                
+                    cf.goTo(np.array([0, 0.1, 0]), 0, 0.05, relative=True)                
                 print "left"
         elif k=='z':
                 for cf in cfs:
-                    cf.goTo(np.array([0.1, 0, 0.1]), 0, 1.0, relative=True)
+                    cf.goTo(np.array([0, 0, 0.1]), 0, 0.03, relative=True)
                 print "up"
         elif k=='c':
                 for cf in cfs:
-                    cf.goTo(np.array([0, 0, -0.1]), 0, 1.0, relative=True)
+                    cf.goTo(np.array([0, 0, -0.1]), 0, 0.03, relative=True)
                 print "down"
         elif k=='q':
                 for cf in cfs:
-                    cf.goTo(np.array([0, 0, 0]), math.pi/8, 1.0, relative=True)
+                    cf.goTo(np.array([0, 0, 0]), math.pi/8, 0.1, relative=True)
                 print "turn left"
         elif k=='e':
                 for cf in cfs:
-                    cf.goTo(np.array([0, 0, 0]), -math.pi/8, 1.0, relative=True)
+                    cf.goTo(np.array([0, 0, 0]), -math.pi/8, 0.1, relative=True)
                 print "turn right"
         elif k=='k':
-                for cf in cfs:
-                    cf.emergency()
+                allcfs.emergency()
                 print "Emergency stop"
         elif k=='t':
                 for cf in cfs:
